@@ -1,5 +1,6 @@
 import React, { useState, useEffect }from 'react';
 import Login from './src/screens/login';
+import ChatList from './src/screens/chatlist';
 import { View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
@@ -28,9 +29,9 @@ const App = () => {
     );
   }
   return (
-    <View>
-      <Text>Welcome {user.email}</Text>
-    </View>
+    <SafeAreaProvider>
+      <ChatList />
+    </SafeAreaProvider>
   );
 };
 

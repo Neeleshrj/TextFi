@@ -3,12 +3,13 @@ import { StyleSheet } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-const SolidButton = ({title,icontype,iconcolor,buttonColor,onPress}) => {
+const SolidButton = ({title,icontype,iconcolor,buttonColor,loading,onPress}) => {
     return(
         <Button    
             title={title}
             type='solid'
             buttonStyle={[styles.button,{backgroundColor: buttonColor}]}
+            loading={loading}
             icon={
                 <Icon 
                     name={icontype}

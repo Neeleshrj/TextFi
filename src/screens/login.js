@@ -1,15 +1,44 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View,StyleSheet, ScrollView} from 'react-native';
+import { SafeAreaView, View,StyleSheet, ScrollView, Alert} from 'react-native';
 import InputBox from '../components/inputbox';
 import SolidButton  from '../components/button';
 import { Text, SocialIcon, Divider, Button } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
+    const [loading, setLoading] = useState(false);
+
+
+    async function login() {
+
+        setLoading(true);
+        try {   
+            await auth().signInWithEmailAndPassword(email, pass)
+            .then(() => {
+                setLoading(true);
+            })
+            .catch(error => {
+                Alert.alert(
+                    'Error!',
+                    error.code,
+                    [
+                        {
+                            text: 'Retry',
+                            onPress: () => console.log('sign in failed..'),
+                            style: 'cancel'
+                        }
+                    ]
+                );
+                setLoading(false);
+            }); 
+          }catch(e){
+            console.log('Error:',e);
+            setLoading(false);
+        }
+    }
 
     return(
         <SafeAreaView style={styles.container}>
@@ -22,29 +51,7 @@ const Login = () => {
                     <InputBox placeholder="Password" type={true} icontype="lock" iconColor='#6c5ce7' value={pass} onChangeText={pass => setPass(pass)}/>
                 </View>
                 <View style={styles.google}>
-                    <SolidButton title='Sign In' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' onPress={
-                        async() => {
-                            try {   
-                                await auth().signInWithEmailAndPassword(email, pass)
-                                .catch(error => {
-                                    Alert.alert(
-                                        'Error!',
-                                        error.code,
-                                        [
-                                            {
-                                                text: 'Retry',
-                                                onPress: () => console.log('sign up failed..'),
-                                                style: 'cancel'
-                                            }
-                                        ]
-                                    );
-                                }); 
-                              }catch(e){
-                                console.log('Error:',e);
-                            }
-                        }
-                    }
-                    />
+                    <SolidButton title='Sign In' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' loading={loading} onPress={() => login()} />
                     <SocialIcon 
                         title='Sign In With Google'
                         button={true}
@@ -67,11 +74,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        padding: hp('4%'),  
+        padding: hp('3%'),  
         backgroundColor: '#6c5ce7',
     },
     headerText: {
-        marginHorizontal: wp('2%'),
+        marginHorizontal: wp('1%'),
         color: '#ffffff'
     },
     input: { 

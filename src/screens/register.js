@@ -11,6 +11,62 @@ const Register = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [cpass, setCpass] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    async function register() {
+        setLoading(true);
+        try {
+            if(pass!= cpass)
+            {
+                Alert.alert(
+                    'Error!',
+                    'Password and Confirm Passowrd do not match!',
+                    [
+                        {
+                            text: 'Retry',
+                            onPress: () => console.log('retry..'),
+                            style: 'cancel'
+                        }
+                    ]
+                )
+            }
+            else{
+                await auth().createUserWithEmailAndPassword(email, pass)
+                .then(() => {
+                    setLoading(false);
+                    firestore().collection('users').doc(auth().currentUser.uid)
+                    .set({
+                        fname: '',
+                        lname: '',
+                        email: email,
+                        createdAt: firestore.Timestamp.fromDate(new Date()),
+                        userImg: null,
+                    })
+                    .catch(error => {
+                        console.log('Error Adding to Firestore: ', error);
+                    })
+                })
+                .catch(error => {
+                    Alert.alert(
+                        'Error!',
+                        error.code,
+                        [
+                            {
+                                text: 'Retry',
+                                onPress: () => console.log('sign up failed..'),
+                                style: 'cancel'
+                            }
+                        ]
+                    );
+                    setLoading(false);
+                });
+            }
+            
+          }catch(e){
+            console.log('Error:',e);
+            setLoading(false);
+        }
+    }
 
     return(
         <SafeAreaView style={styles.container}>
@@ -24,58 +80,7 @@ const Register = () => {
                     <InputBox placeholder="Confirm Password" type={true} icontype="lock" iconColor='#6c5ce7' value={cpass} onChangeText={cpass => setCpass(cpass)}/>
                 </View>
                 <View style={styles.google}>
-                    <SolidButton title='Sign Up' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' onPress={
-                        async() => {
-                            try {
-                                if(pass!= cpass)
-                                {
-                                    Alert.alert(
-                                        'Error!',
-                                        'Password and Confirm Passowrd do not match!',
-                                        [
-                                            {
-                                                text: 'Retry',
-                                                onPress: () => console.log('retry..'),
-                                                style: 'cancel'
-                                            }
-                                        ]
-                                    )
-                                }
-                                else{
-                                    await auth().createUserWithEmailAndPassword(email, pass)
-                                    .then(() => {
-                                    firestore().collection('users').doc(auth().currentUser.uid)
-                                    .set({
-                                        fname: '',
-                                        lname: '',
-                                        email: email,
-                                        createdAt: firestore.Timestamp.fromDate(new Date()),
-                                        userImg: null,
-                                    })
-                                    .catch(error => {
-                                        console.log('Error Adding to Firestore: ', error);
-                                    })
-                                    })
-                                    .catch(error => {
-                                        Alert.alert(
-                                            'Error!',
-                                            error.code,
-                                            [
-                                                {
-                                                    text: 'Retry',
-                                                    onPress: () => console.log('sign up failed..'),
-                                                    style: 'cancel'
-                                                }
-                                            ]
-                                        );
-                                    });
-                                }
-                                
-                              }catch(e){
-                                console.log('Error:',e);
-                            }
-                        }
-                    }/>
+                    <SolidButton title='Sign Up' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' register={loading} onPress={() => register()}/>
                     <SocialIcon     
                         button={true}
                         title='Sign Up With Google'
@@ -98,11 +103,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        padding: hp('4%'),  
+        padding: hp('3%'),  
         backgroundColor: '#6c5ce7',
     },
     headerText: {
-        marginHorizontal: wp('2%'),
+        marginHorizontal: wp('1%'),
         color: '#ffffff'
     },
     input: { 

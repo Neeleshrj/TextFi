@@ -5,8 +5,9 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
+    
     return(
-        <AuthContext.Provider>
+        <AuthContext.Provider
             value = {{
                 user,
                 setUser,
@@ -18,12 +19,38 @@ export const AuthProvider = ({children}) => {
                     }
                 },
                 register: async(email,password) => {
-                    try{
-                        await auth().createUserWithEmailAndPassword(email,password);
-                    }catch(e){
+                    try {
+                        await auth().createUserWithEmailAndPassword(email, password)
+                        .then(() => {
+                          firestore().collection('users').doc(auth().currentUser.uid)
+                          .set({
+                              fname: '',
+                              lname: '',
+                              email: email,
+                              createdAt: firestore.Timestamp.fromDate(new Date()),
+                              userImg: null,
+                          })
+                          .catch(error => {
+                              console.log('Error adding user to firestore: ', error);
+                          })
+                        })
+                        .catch(error => {
+                            Alert.alert(
+                                'Error!',
+                                error.code,
+                                [
+                                    {
+                                        text: 'Retry',
+                                        onPress: () => console.log('sign up failed..'),
+                                        style: 'cancel'
+                                    }
+                                ]
+                            );
+                        });
+                      } catch (e) {
                         console.log(e);
-                    }
-                },
+                      }
+                    },
                 logout: async() => {
                     try{
                         await auth.signOut();
@@ -31,7 +58,7 @@ export const AuthProvider = ({children}) => {
                         console.log(e);
                     }
                 }
-            }}
+            }}>
             {children}
         </AuthContext.Provider>
     );
