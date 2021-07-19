@@ -35,7 +35,17 @@ const Login = () => {
                 setLoading(false);
             }); 
           }catch(e){
-            console.log('Error:',e);
+            Alert.alert(
+                'Error!',
+                error.code,
+                [
+                    {
+                        text: 'Retry',
+                        onPress: () => console.log('sign in failed..'),
+                        style: 'cancel'
+                    }
+                ]
+            );
             setLoading(false);
         }
     }
