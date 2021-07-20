@@ -1,13 +1,19 @@
+/* React & React Native imports */
 import React, { useState } from 'react';
 import { SafeAreaView, View,StyleSheet, ScrollView, Alert} from 'react-native';
-import InputBox from '../components/inputbox';
-import SolidButton  from '../components/button';
 import { Text, SocialIcon, Divider, Button } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+/* Components*/
+import InputBox from '../components/inputbox';
+import SolidButton  from '../components/button';
+
+/* Firebase */
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-const Register = () => {
+
+const Register = ({navigation}) => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [cpass, setCpass] = useState("");
@@ -91,7 +97,7 @@ const Register = () => {
                 </View>
                 <View style={styles.bottomContainer}>
                     <Divider orientation='horizontal' subHeader='Already a Member?' width={wp('0.5%')} subHeaderStyle={styles.subHeader}/>
-                    <Button title='Sign In' type='clear' buttonStyle={styles.signin} /> 
+                    <Button title='Sign In' type='clear' buttonStyle={styles.signin} onPress={()=>navigation.navigate('login')}/> 
                 </View>
             </ScrollView> 
         </SafeAreaView>

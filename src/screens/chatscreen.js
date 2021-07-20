@@ -1,3 +1,4 @@
+/* React & React Native imports */
 import React, {useState, useEffect, useCallback} from 'react';
 import {SafeAreaView, View, StyleSheet, ScrollView, Alert} from 'react-native';
 import {Text} from 'react-native-elements';
@@ -6,6 +7,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {GiftedChat} from 'react-native-gifted-chat';
+
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
@@ -32,11 +34,6 @@ const ChatScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text h1 h1Style={styles.headerText}>
-          ChatScreen
-        </Text>
-      </View>
         <GiftedChat
           messages={messages}
           onSend={messages => onSend(messages)}
@@ -52,15 +49,6 @@ const ChatScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    padding: hp('2%'),
-    backgroundColor: '#6c5ce7',
-  },
-  headerText: {
-    marginHorizontal: wp('2%'),
-    color: '#ffffff',
-    fontSize: hp('5%'),
   },
 });
 

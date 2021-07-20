@@ -1,9 +1,13 @@
-import React, { useState, useEffect }from 'react';
-import Login from './src/screens/login';
-import ChatList from './src/screens/chatlist';
-import ChatScreen from './src/screens/chatscreen';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+/* React & React Native imports */
+import 'react-native-gesture-handler';
+import React, {useState, useEffect} from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+
+/* Navigator imports */
 import auth from '@react-native-firebase/auth';
+import {NavigationContainer} from '@react-navigation/native';
+import AuthStack from './src/router/authstack';
+import RootStack from './src/router/rootstack';
 
 const App = () => {
   const [initializing, setInitializing] = useState(true);
@@ -23,15 +27,19 @@ const App = () => {
 
   if (!user) {
     return (
-      <SafeAreaProvider>
-        <Login />
+      <NavigationContainer>
+        <SafeAreaProvider>
+        <AuthStack />
       </SafeAreaProvider>
+      </NavigationContainer>
     );
   }
   return (
-    <SafeAreaProvider>
-      <ChatScreen />
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <RootStack />
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 };
 
