@@ -42,11 +42,9 @@ const Register = ({navigation}) => {
                     setLoading(false);
                     firestore().collection('users').doc(auth().currentUser.uid)
                     .set({
-                        fname: '',
-                        lname: '',
                         email: email,
-                        createdAt: firestore.Timestamp.fromDate(new Date()),
-                        userImg: null,
+                        room: [],
+                        uid: auth().currentUser.uid
                     })
                     .catch(error => {
                         console.log('Error Adding to Firestore: ', error);

@@ -8,10 +8,13 @@ import auth from '@react-native-firebase/auth';
 import {NavigationContainer} from '@react-navigation/native';
 import AuthStack from './src/router/authstack';
 import RootStack from './src/router/rootstack';
+import {applyMiddleware, createStore} from 'redux';
 
 const App = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+
+  const store = createStore(reducers, applyMiddleware(ReduxThunk));
 
   function onAuthStateChanged(user) {
     setUser(user);
@@ -29,17 +32,19 @@ const App = () => {
     return (
       <NavigationContainer>
         <SafeAreaProvider>
-        <AuthStack />
-      </SafeAreaProvider>
+          <AuthStack />
+        </SafeAreaProvider>
       </NavigationContainer>
     );
   }
   return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <RootStack />
-      </SafeAreaProvider>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <RootStack />
+        </SafeAreaProvider>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
