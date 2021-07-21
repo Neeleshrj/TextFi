@@ -9,5 +9,8 @@ export const getMedList = () => {
         await firestore()
         .collection('rooms')
         .where('members','array-contains-any',[auth().currentUser.uid])
+        .get()
+        .then(console.log(res))
+        .catch(e => console.log(e));
     };
 };
