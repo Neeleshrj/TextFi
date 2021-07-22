@@ -1,7 +1,7 @@
 /* React & React native */
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Text, Overlay, Button, Icon} from 'react-native-elements';
+import {Overlay} from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -32,7 +32,8 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle}) => {
             sentBy: '',
             sentAt: '',
           },
-          unread: ""
+          unread: "0",
+          rid: "",
         })
         .then(async docRef => {
           await firestore()
@@ -41,6 +42,14 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle}) => {
             .update({
               room: firestore.FieldValue.arrayUnion(docRef.id),
             })
+            .then(
+              firestore()
+              .collection('rooms')
+              .doc(docRef.id)
+              .update({
+                rid: docRef.id,
+              })
+            )
             .catch(e => console.log(e));
         })
         .then(() => {
