@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     chatNameBox: {
         flex: 6,
         //backgroundColor: 'blue',
-        padding: hp('1%')
+        padding: hp('0.25%')
     },
     chatDetails: {
         //backgroundColor: 'red',
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     recentText: {
-        fontSize: hp('2%'),
+        fontSize: hp('2.25%'),
         //backgroundColor: 'orange'
     }
 });

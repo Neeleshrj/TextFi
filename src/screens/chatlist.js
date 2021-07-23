@@ -35,39 +35,38 @@ const ChatList = ({RoomList, navigation}) => {
   const [modalLoading, setModalLoading] = useState(false);
   const dispatch = useDispatch();
 
+
+  /* after adding chat from create */
   const data = [];
   useEffect(async () => {
     if (modalLoading) {
-      // setLoading(true);
-      console.log('getting chat list...');
       await firestore()
         .collection('rooms')
         .where('members', 'array-contains-any', [auth().currentUser.uid])
+        .orderBy('sentAt','asc')
         .get()
         .then(res => {
           res.forEach(doc => {
             data.push(doc.data());
           });
-          //console.log(data);
           dispatch(getRoomList(data));
-          // setLoading(false);
           setModalLoading(false);
         })
         .catch(e => {
           console.log(e);
-          // setLoading(false);
           setModalLoading(false);
         });
     }
   }, [modalLoading]);
 
+  /* First use effect */
   useEffect(async () => {
     setLoading(true);
     console.log('getting chat list...');
     await firestore()
       .collection('rooms')
       .where('members', 'array-contains-any', [auth().currentUser.uid])
-    //   .orderBy('sentAt','desc')
+      .orderBy('sentAt','asc')
       .get()
       .then(res => {
         res.forEach(doc => {
@@ -82,6 +81,8 @@ const ChatList = ({RoomList, navigation}) => {
         setLoading(false);
       });
   }, []);
+
+
 
   function renderRooms(room) {
     console.log('inside render');
