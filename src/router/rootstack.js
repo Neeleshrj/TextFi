@@ -13,7 +13,6 @@ import ChatList from '../screens/chatlist';
 import ChatScreen from '../screens/chatscreen';
 
 
-
 const Stack = createStackNavigator();
 
 const RootStack = ({navigation}) => {
@@ -43,9 +42,9 @@ const RootStack = ({navigation}) => {
       <Stack.Screen
         name="chatscreen"
         component={ChatScreen}
-        options={{
-          title: 'Chat Screen',
-        }}
+        options={({route}) => ({
+          title: route.params.screenName,
+        })}
       />
       <Stack.Screen
         name="settings"

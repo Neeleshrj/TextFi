@@ -30,8 +30,8 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModa
           recent: {
             message: '',
             sentBy: '',
-            sentAt: '',
           },
+          sentAt: '',
           unread: "0",
           rid: "",
         })
@@ -43,12 +43,22 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModa
               room: firestore.FieldValue.arrayUnion(docRef.id),
             })
             .then(
-              firestore()
+              await firestore()
               .collection('rooms')
               .doc(docRef.id)
               .update({
                 rid: docRef.id,
               })
+              .catch(e => console.log(e))
+            )
+            .then(
+              await firestore()
+              .collection('messages')
+              .doc(docRef.id)
+              .set({
+                messages: [],
+              })
+              .catch(e => console.log(e))
             )
             .catch(e => console.log(e));
         })
