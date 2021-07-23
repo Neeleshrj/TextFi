@@ -1,4 +1,4 @@
-/* React & React Native imports */
+/* React & React Native*/
 import  React, { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback, SafeAreaView,StyleSheet, View, FlatList } from 'react-native';
 import { SpeedDial } from 'react-native-elements';
@@ -23,9 +23,36 @@ const ChatList = ({RoomList,navigation}) => {
     const [placeholder, setPlaceholder] = useState('');
     const [buttonTitle, setButtonTitle] = useState('');
     const [loading, setLoading] = useState(false);
+    const [modalLoading, setModalLoading] = useState(false);
     const dispatch = useDispatch();
 
     const data = [];
+    useEffect(async () => {
+        if(modalLoading)
+        {
+        // setLoading(true);
+        console.log('getting chat list...');
+        await firestore()
+            .collection('rooms')
+            .where('members','array-contains-any',[auth().currentUser.uid])
+            .get()
+            .then(res => {
+                res.forEach((doc) => {
+                    data.push(doc.data()); 
+                })
+                //console.log(data);
+                dispatch(getRoomList(data));
+                // setLoading(false);
+                setModalLoading(false);
+            })
+            .catch(e => {
+                console.log(e);
+                // setLoading(false);
+                setModalLoading(false);
+            });
+        }
+    },[modalLoading])
+
     useEffect(async () => {
         setLoading(true);
         console.log('getting chat list...');
@@ -37,11 +64,14 @@ const ChatList = ({RoomList,navigation}) => {
                 res.forEach((doc) => {
                     data.push(doc.data()); 
                 })
-                console.log(data);
-                dispatch(getRoomList(data))
+                //console.log(data);
+                dispatch(getRoomList(data));
                 setLoading(false);
             })
-            .catch(e => console.log(e));
+            .catch(e => {
+                console.log(e);
+                setLoading(false);
+            });
     },[])
 
 
@@ -54,6 +84,8 @@ const ChatList = ({RoomList,navigation}) => {
             </TouchableWithoutFeedback>
         );
     }
+
+
     if(loading){
         return (
             <View style={{marginTop: hp('40%'),marginHorizontal: wp('20%')}}>
@@ -71,8 +103,6 @@ const ChatList = ({RoomList,navigation}) => {
                             renderItem={renderRooms}
                             keyExtractor={room => room.rid}
                         >
-                        {console.log('inside flat list')}
-                        {console.log(RoomList)}
                         </FlatList>
                     </TouchableWithoutFeedback>
                     
@@ -100,7 +130,7 @@ const ChatList = ({RoomList,navigation}) => {
                     color='#6c5ce7'
                 />
             </SpeedDial>
-            <Overlay visible={visible} toggleOverlay={() => setVisible(!visible)} buttonTitle={buttonTitle} placeholder={placeholder}/>
+            <Overlay visible={visible} toggleOverlay={() => setVisible(!visible)} buttonTitle={buttonTitle} placeholder={placeholder} setModalLoading={setModalLoading}/>
         </SafeAreaView>
     );
 };

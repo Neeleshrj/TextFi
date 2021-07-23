@@ -15,7 +15,7 @@ import auth from '@react-native-firebase/auth';
 import InputBox from './inputbox';
 import ModalButton from './modalButton';
 
-const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle}) => {
+const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModalLoading}) => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +54,7 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle}) => {
         })
         .then(() => {
           setLoading(false);
+          setModalLoading(true);
           setInput('');
           console.log('succ');
         })
