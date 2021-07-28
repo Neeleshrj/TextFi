@@ -12,6 +12,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { useIsFocused } from '@react-navigation/native';
+
 
 /* Redux */
 import {connect, useDispatch} from 'react-redux';
@@ -34,54 +36,31 @@ const ChatList = ({RoomList, navigation}) => {
   const [loading, setLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
-
-  /* after adding chat from create */
-  const data = [];
+  
   useEffect(async () => {
-    if (modalLoading) {
-      await firestore()
-        .collection('rooms')
-        .where('members', 'array-contains-any', [auth().currentUser.uid])
-        .orderBy('sentAt','asc')
-        .get()
-        .then(res => {
-          res.forEach(doc => {
-            data.push(doc.data());
-          });
-          dispatch(getRoomList(data));
-          setModalLoading(false);
-        })
-        .catch(e => {
-          console.log(e);
-          setModalLoading(false);
-        });
-    }
-  }, [modalLoading]);
-
-  /* First use effect */
-  useEffect(async () => {
+    console.log('listner for chatlist...')
     setLoading(true);
-    console.log('getting chat list...');
     await firestore()
-      .collection('rooms')
-      .where('members', 'array-contains-any', [auth().currentUser.uid])
-      .orderBy('sentAt','asc')
-      .get()
-      .then(res => {
-        res.forEach(doc => {
-          data.push(doc.data());
-        });
-        //console.log(data);
-        dispatch(getRoomList(data));
-        setLoading(false);
-      })
-      .catch(e => {
-        console.log(e);
-        setLoading(false);
-      });
-  }, []);
+    .collection('rooms')
+    .where('members', 'array-contains-any', [auth().currentUser.uid])
+    .onSnapshot(onResult, onError);
+    return () => subscriber();
+  },[isFocused]);
 
+  function onResult(QuerySnapshot) {
+    const tempData = [];
+    QuerySnapshot.forEach(doc => {
+      tempData.push(doc.data());
+    });
+    dispatch(getRoomList(tempData));
+    setLoading(false);
+  }
+
+  function onError(error) {
+    console.error(error);
+  }
 
 
   function renderRooms(room) {
@@ -97,7 +76,7 @@ const ChatList = ({RoomList, navigation}) => {
             navigation.navigate('chatscreen', {
               screenName: room.item.name,
               rid: room.item.rid,
-              members: room.item.members
+              members: room.item.members,
             })
           }
         />
