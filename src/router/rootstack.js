@@ -11,11 +11,13 @@ import { Icon } from 'react-native-elements';
 /* Screens*/
 import ChatList from '../screens/chatlist';
 import ChatScreen from '../screens/chatscreen';
+import Settings from "../screens/setttings";
+import Logout from "../screens/logout";
 
 
 const Stack = createStackNavigator();
 
-const RootStack = ({navigation}) => {
+const RootStack = () => {
 
   return (
     <Stack.Navigator
@@ -48,10 +50,15 @@ const RootStack = ({navigation}) => {
       />
       <Stack.Screen
         name="settings"
-        component={ChatScreen}
+        component={Settings}
         options={{
           title: 'Settings',
         }}
+      />
+      <Stack.Screen
+        name="logout"
+        component={Logout}
+        headerMode='none'
       />
     </Stack.Navigator>
   );
