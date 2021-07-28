@@ -7,7 +7,7 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import {SpeedDial} from 'react-native-elements';
+import {SpeedDial, ListItem, Avatar } from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -24,7 +24,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 /* Components*/
-import Chat from '../components/chatbox';
+import ChatBox from '../components/chatbox';
 import Overlay from '../components/overlay';
 import Loading from '../components/loading';
 
@@ -39,12 +39,13 @@ const ChatList = ({RoomList, navigation}) => {
   const isFocused = useIsFocused();
 
   
-  useEffect(async () => {
+  useEffect(() => {
     console.log('listner for chatlist...')
     setLoading(true);
-    await firestore()
+    const subscriber = firestore()
     .collection('rooms')
     .where('members', 'array-contains-any', [auth().currentUser.uid])
+    .orderBy('sentAt')
     .onSnapshot(onResult, onError);
     return () => subscriber();
   },[isFocused]);
@@ -68,7 +69,7 @@ const ChatList = ({RoomList, navigation}) => {
     console.log(room.item.name);
     return (
       <TouchableWithoutFeedback>
-        <Chat
+        {/* <ChatBox
           chatName={room.item.name}
           notifications={room.item.unread}
           recent={room.item.recent.message}
@@ -79,7 +80,24 @@ const ChatList = ({RoomList, navigation}) => {
               members: room.item.members,
             })
           }
-        />
+        /> */}
+        <ListItem 
+          bottomDivider
+          onPress={() =>
+            navigation.navigate('chatscreen', {
+              screenName: room.item.name,
+              rid: room.item.rid,
+              members: room.item.members,
+            })
+          }
+        >
+          <Avatar source={{uri: room.item.avatar_url}} activeOpacity={0.7} size="medium"/>
+          <ListItem.Content>
+            <ListItem.Title style={styles.chatTitle}>{room.item.name}</ListItem.Title>
+            <ListItem.Subtitle>{room.item.recent.message}</ListItem.Subtitle>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
       </TouchableWithoutFeedback>
     );
   }
@@ -146,6 +164,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  chatTitle: {
+    fontWeight: 'bold',
+    letterSpacing: hp('0.1%')
+  }
 });
 
 const mapStateToProps = state => {

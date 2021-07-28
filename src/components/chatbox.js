@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View,StyleSheet, TouchableOpacity} from 'react-native';
 import { Badge, Text } from 'react-native-elements'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         padding: hp('1%')
     },
     chatName: {
-        fontSize: hp('4%')
+        fontSize: hp('3%')
     },
     badgeBox: {
         flex: 1,

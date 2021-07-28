@@ -1,6 +1,6 @@
 /* React & React Native imports */
-import React, {useState, useEffect, useCallback} from 'react';
-import {SafeAreaView, StyleSheet, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -21,25 +21,13 @@ const ChatScreen = ({route}) => {
   const uid = auth().currentUser.uid;
   const name = uid.slice(uid.length - 4, uid.length);
 
-  // /*first call */
-  // useEffect(async () => {
-  //   await firestore()
-  //     .collection('messages')
-  //     .doc(rid)
-  //     .get()
-  //     .then(res => {
-  //       console.log('first call');
-  //       console.log(res.data());
-  //       setMessages(res.data().messages);
-  //     })
-  //     .catch(e => console.log(e));
-  // }, []);
-
-
   /*listener */
-  useEffect(async () => {
+  useEffect(() => {
     console.log('listner.....')
-    await firestore().collection('messages').doc(rid).onSnapshot(onResult, onError);
+    const subscriber = firestore()
+    .collection('messages')
+    .doc(rid)
+    .onSnapshot(onResult, onError);
     return () => subscriber();
   },[]);
 
@@ -100,13 +88,13 @@ const ChatScreen = ({route}) => {
         inverted={false}
         text={text}
         onInputTextChanged={text => setText(text)}
-        isTyping={isTyping}
         onSend={messages => onSend(messages, text)}
         user={{
           _id: uid,
           name: name,
         }}
-        style={{backgroundColor: 'green'}}
+        renderAvatarOnTop={true}
+        scrollToBottom={true}
       />
     </SafeAreaView>
   );

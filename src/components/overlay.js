@@ -34,6 +34,7 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModa
           sentAt: '',
           unread: "0",
           rid: "",
+          avatar_url: "https://ui-avatars.com/api/?name="+input+"&background=random&rounded=true"
         })
         .then(async docRef => {
           await firestore()
@@ -82,6 +83,10 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModa
             .doc(auth().currentUser.uid)
             .update({
               room: firestore.FieldValue.arrayUnion(input),
+            })
+            .then(()=> {
+              setLoading(false);
+              setModalLoading(true);
             })
             .catch(e => console.log(e));
         })
