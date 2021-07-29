@@ -2,6 +2,9 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+/* React */
+import {Alert} from 'react-native';
+
 function purgeMessages(rid) {
 //   navigation.popToTop();
   firestore()

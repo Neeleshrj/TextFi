@@ -8,12 +8,11 @@ import {
 } from 'react-native-responsive-screen';
 import { Icon } from 'react-native-elements';
 
-
 /* Screens*/
-import ChatList from '../screens/chatlist';
-import ChatScreen from '../screens/chatscreen';
-import Settings from "../screens/setttings";
-import Logout from "../screens/logout";
+import ChatList from '../screens/ChatList/chatlist';
+import ChatScreen from '../screens/ChatScreen/chatscreen';
+import Settings from "../screens/Settings/setttings";
+import Logout from "../screens/Logout/logout";
 import ChatInfo from "../screens/ChatInfo/chatinfo";
 
 

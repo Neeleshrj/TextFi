@@ -7,6 +7,9 @@ import {
 } from 'react-native-responsive-screen';
 import {GiftedChat} from 'react-native-gifted-chat';
 
+/*Functions */
+import { onSend } from './helper';
+
 /*firebase*/
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -39,48 +42,6 @@ const ChatScreen = ({route}) => {
     console.error(error);
   }
 
-  /* on send */
-  async function onSend(message, text) {
-    setTyping(false);
-    setSend(true);
-    // console.log('sending message to db...')
-    // console.log(message.map(a => a.createdAt));
-    console.log(text);
-    await firestore()
-      .collection('messages')
-      .doc(rid)
-      .update({
-        messages: firestore.FieldValue.arrayUnion({
-          _id: message.map(a => a._id),
-          text: text,
-          createdAt: new Date().toUTCString(),
-          user: {
-            _id: uid,
-            name: name,
-          },
-        }),
-      })
-      .then(async () => {
-        console.log('sent!');
-        setSend(false);
-        await firestore()
-          .collection('rooms')
-          .doc(rid)
-          .update({
-            recent: {
-              message: text,
-              sentBy: name,
-            },
-            sentAt: message.map(a => a.createdAt),
-          })
-          .catch(e => console.log(e));
-      })
-      .catch(e => {
-        console.log(e);
-        setSend(false);
-      });
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <GiftedChat
@@ -88,7 +49,12 @@ const ChatScreen = ({route}) => {
         inverted={false}
         text={text}
         onInputTextChanged={text => setText(text)}
-        onSend={messages => onSend(messages, text)}
+        onSend={messages => {
+          setTyping(false);
+          setSend(true);
+          onSend(messages, text);
+          setSend(false);
+        }}
         user={{
           _id: uid,
           name: name,

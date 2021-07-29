@@ -9,7 +9,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import AuthStack from './src/router/authstack';
 import RootStack from './src/router/rootstack';
 
-
 /* Redux */
 import reducers from "./src/reducers/rootReducer";
 import {applyMiddleware, createStore} from 'redux';

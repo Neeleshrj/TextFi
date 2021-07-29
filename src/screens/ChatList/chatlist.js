@@ -17,16 +17,16 @@ import { useIsFocused } from '@react-navigation/native';
 
 /* Redux */
 import {connect, useDispatch} from 'react-redux';
-import {getRoomList} from '../actions/actions';
+import {getRoomList} from '../../actions/actions';
 
 /* Firebase */
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 /* Components*/
-import ChatBox from '../components/chatbox';
-import Overlay from '../components/overlay';
-import Loading from '../components/loading';
+import ChatBox from '../../components/chatbox';
+import Overlay from '../../components/overlay';
+import Loading from '../../components/loading';
 
 const ChatList = ({RoomList, navigation}) => {
   const [open, setOpen] = useState(false);
@@ -47,7 +47,7 @@ const ChatList = ({RoomList, navigation}) => {
     .where('members', 'array-contains-any', [auth().currentUser.uid])
     .orderBy('sentAt')
     .onSnapshot(onResult, onError);
-    return () => subscriber();
+    return () => {subscriber();}
   },[isFocused]);
 
   function onResult(QuerySnapshot) {

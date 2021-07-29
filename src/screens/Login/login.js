@@ -5,8 +5,11 @@ import { Text, SocialIcon, Divider, Button } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 /* Components*/
-import InputBox from '../components/inputbox';
-import SolidButton  from '../components/button';
+import InputBox from '../../components/inputbox';
+import SolidButton  from '../../components/button';
+
+/* Functions */
+import {login} from './helper';
 
 /* Firebase */
 import auth from '@react-native-firebase/auth';
@@ -15,45 +18,6 @@ const Login = ({navigation}) => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [loading, setLoading] = useState(false);
-
-
-    async function login() {
-
-        setLoading(true);
-        try {   
-            await auth().signInWithEmailAndPassword(email, pass)
-            .then(() => {
-                setLoading(true);
-            })
-            .catch(error => {
-                Alert.alert(
-                    'Error!',
-                    error.code,
-                    [
-                        {
-                            text: 'Retry',
-                            onPress: () => console.log('sign in failed..'),
-                            style: 'cancel'
-                        }
-                    ]
-                );
-                setLoading(false);
-            }); 
-          }catch(e){
-            Alert.alert(
-                'Error!',
-                error.code,
-                [
-                    {
-                        text: 'Retry',
-                        onPress: () => console.log('sign in failed..'),
-                        style: 'cancel'
-                    }
-                ]
-            );
-            setLoading(false);
-        }
-    }
 
     return(
         <SafeAreaView style={styles.container}>
@@ -66,7 +30,18 @@ const Login = ({navigation}) => {
                     <InputBox placeholder="Password" type={true} icontype="lock" iconColor='#6c5ce7' value={pass} onChangeText={pass => setPass(pass)}/>
                 </View>
                 <View style={styles.google}>
-                    <SolidButton title='Sign In' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' loading={loading} onPress={() => login()} />
+                    <SolidButton 
+                        title='Sign In' 
+                        icontype='arrow-right' 
+                        iconcolor='#ffffff' 
+                        buttonColor='#d63031' 
+                        loading={loading} 
+                        onPress={() => {
+                            setLoading(true);
+                            login(email,pass);
+                            setLoading(false);
+                        }} 
+                    />
                     {/* <SocialIcon 
                         title='Sign In With Google'
                         button={true}

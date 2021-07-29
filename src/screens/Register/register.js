@@ -1,16 +1,15 @@
 /* React & React Native imports */
 import React, { useState } from 'react';
-import { SafeAreaView, View,StyleSheet, ScrollView, Alert} from 'react-native';
+import { SafeAreaView, View,StyleSheet, ScrollView } from 'react-native';
 import { Text, SocialIcon, Divider, Button } from 'react-native-elements';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-/* Components*/
-import InputBox from '../components/inputbox';
-import SolidButton  from '../components/button';
+/* Functions */
+import {register} from './helper';
 
-/* Firebase */
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+/* Components*/
+import InputBox from '../../components/inputbox';
+import SolidButton  from '../../components/button';
 
 
 const Register = ({navigation}) => {
@@ -18,58 +17,6 @@ const Register = ({navigation}) => {
     const [pass, setPass] = useState("");
     const [cpass, setCpass] = useState("");
     const [loading, setLoading] = useState(false);
-
-    async function register() {
-        setLoading(true);
-        try {
-            if(pass!= cpass)
-            {
-                Alert.alert(
-                    'Error!',
-                    'Password and Confirm Passowrd do not match!',
-                    [
-                        {
-                            text: 'Retry',
-                            onPress: () => console.log('retry..'),
-                            style: 'cancel'
-                        }
-                    ]
-                )
-            }
-            else{
-                await auth().createUserWithEmailAndPassword(email, pass)
-                .then(() => {
-                    setLoading(false);
-                    firestore().collection('users').doc(auth().currentUser.uid)
-                    .set({
-                        email: email,
-                        uid: auth().currentUser.uid
-                    })
-                    .catch(error => {
-                        console.log('Error Adding to Firestore: ', error);
-                    })
-                })
-                .catch(error => {
-                    Alert.alert(
-                        'Error!',
-                        error.code,
-                        [
-                            {
-                                text: 'Retry',
-                                onPress: () => console.log('sign up failed..'),
-                                style: 'cancel'
-                            }
-                        ]
-                    );
-                    setLoading(false);
-                });
-            }
-            
-          }catch(e){
-            console.log('Error:',e);
-            setLoading(false);
-        }
-    }
 
     return(
         <SafeAreaView style={styles.container}>
@@ -83,7 +30,18 @@ const Register = ({navigation}) => {
                     <InputBox placeholder="Confirm Password" type={true} icontype="lock" iconColor='#6c5ce7' value={cpass} onChangeText={cpass => setCpass(cpass)}/>
                 </View>
                 <View style={styles.google}>
-                    <SolidButton title='Sign Up' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' register={loading} onPress={() => register()}/>
+                    <SolidButton 
+                        title='Sign Up' 
+                        icontype='arrow-right' 
+                        iconcolor='#ffffff' 
+                        buttonColor='#d63031' 
+                        register={loading} 
+                        onPress={() => {
+                            setLoading(true);
+                            register(email,pass,cpass);
+                            setLoading(false);
+                        }}
+                    />
                     {/* <SocialIcon     
                         button={true}
                         title='Sign Up With Google'
