@@ -5,7 +5,7 @@ import {View, Alert} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 
 /* Components */
-import CopiedModal from '../../components/copiedModal';
+import TempModal from '../../components/tempModal';
 import Loading from '../../components/loading';
 
 /* Function */
@@ -103,7 +103,7 @@ const ChatInfo = ({route, navigation}) => {
           <ListItem.Chevron />
         </ListItem>
       ))}
-      <CopiedModal visible={modalVisible} text="Room Code copied!" />
+      <TempModal visible={modalVisible} text="Room Code copied!" />
     </View>
   );
 };

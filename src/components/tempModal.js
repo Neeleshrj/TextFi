@@ -5,7 +5,7 @@ import {
     heightPercentageToDP as hp,
   } from 'react-native-responsive-screen';
 
-const CopiedModal = ({visible, text}) => {
+const TempModal = ({visible, text}) => {
   return (
     <Overlay isVisible={visible} overlayStyle={{marginTop: hp('65%')}}>
       <Text >{text}</Text>
@@ -13,4 +13,4 @@ const CopiedModal = ({visible, text}) => {
   );
 };
 
-export default CopiedModal;
+export default TempModal;
