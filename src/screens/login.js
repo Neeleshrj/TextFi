@@ -67,13 +67,13 @@ const Login = ({navigation}) => {
                 </View>
                 <View style={styles.google}>
                     <SolidButton title='Sign In' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' loading={loading} onPress={() => login()} />
-                    <SocialIcon 
+                    {/* <SocialIcon 
                         title='Sign In With Google'
                         button={true}
                         type='google'
                         loading={false}
                         style={{padding: hp('2%'), backgroundColor: '#4285F4'}}
-                    />   
+                    />    */}
                 </View>
                 <View style={styles.bottomContainer}>
                     <Divider orientation='horizontal' subHeader='New here?' width={wp('0.5%')} subHeaderStyle={styles.subHeader}/>

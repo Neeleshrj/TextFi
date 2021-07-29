@@ -84,13 +84,13 @@ const Register = ({navigation}) => {
                 </View>
                 <View style={styles.google}>
                     <SolidButton title='Sign Up' icontype='arrow-right' iconcolor='#ffffff' buttonColor='#d63031' register={loading} onPress={() => register()}/>
-                    <SocialIcon     
+                    {/* <SocialIcon     
                         button={true}
                         title='Sign Up With Google'
                         type='google'
                         loading={false}
                         style={{padding: hp('2%'), backgroundColor: '#4285F4'}}
-                    />     
+                    />      */}
                 </View>
                 <View style={styles.bottomContainer}>
                     <Divider orientation='horizontal' subHeader='Already a Member?' width={wp('0.5%')} subHeaderStyle={styles.subHeader}/>

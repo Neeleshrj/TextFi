@@ -14,7 +14,7 @@ import ChatList from '../screens/chatlist';
 import ChatScreen from '../screens/chatscreen';
 import Settings from "../screens/setttings";
 import Logout from "../screens/logout";
-import ChatInfo from "../screens/chatinfo";
+import ChatInfo from "../screens/ChatInfo/chatinfo";
 
 
 
