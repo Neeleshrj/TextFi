@@ -8,7 +8,7 @@ const Settings = ({navigation}) => {
     {
       title: 'Reset Password',
       icon: 'lock-clock',
-      route: 'reset-pass'
+      route: 'forgotpass'
     },
     {
       title: 'Logout',

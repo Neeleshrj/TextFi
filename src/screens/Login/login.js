@@ -50,7 +50,8 @@ const Login = ({navigation}) => {
                 </View>
                 <View style={styles.bottomContainer}>
                     <Divider orientation='horizontal' subHeader='New here?' width={wp('0.5%')} subHeaderStyle={styles.subHeader}/>
-                    <Button title='Sign Up' type='clear' buttonStyle={styles.signin} onPress={()=> navigation.navigate('register')}/> 
+                    <Button title='Sign Up' type='clear' buttonStyle={styles.signin} onPress={()=> navigation.navigate('register')}/>
+                    <Button title='Forgot Password?' type='clear' buttonStyle={styles.forgotpass} onPress={()=> navigation.navigate('forgotpass')}/>  
                 </View>
             </ScrollView>    
         </SafeAreaView>
@@ -87,6 +88,9 @@ const styles = StyleSheet.create({
     },
     signin: {
         marginHorizontal: wp('40%')
+    },
+    forgotpass: {
+        marginHorizontal: wp('0%')
     }
 });
 

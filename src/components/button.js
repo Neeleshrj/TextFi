@@ -7,8 +7,9 @@ const SolidButton = ({title,icontype,iconcolor,buttonColor,loading,onPress}) => 
     return(
         <Button    
             title={title}
+            titleStyle={{color: iconcolor}}
             type='solid'
-            buttonStyle={[styles.button,{backgroundColor: buttonColor}]}
+            buttonStyle={[styles.button,{backgroundColor: buttonColor, borderColor: iconcolor}]}
             loading={loading}
             icon={
                 <Icon 
@@ -28,7 +29,7 @@ const SolidButton = ({title,icontype,iconcolor,buttonColor,loading,onPress}) => 
 const styles = StyleSheet.create({
     button: {
         padding: hp('1%'),
-        borderRadius: 100,
+        borderWidth: 1,
         marginVertical: hp('1%'),
         marginHorizontal: hp('1%')
     },
