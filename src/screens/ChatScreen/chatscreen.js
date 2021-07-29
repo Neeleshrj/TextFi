@@ -42,15 +42,6 @@ const ChatScreen = ({route}) => {
     console.error(error);
   }
 
-  function getRandomColor() {
-    var letters = 'BCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * letters.length)];
-    }
-    return color;
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <GiftedChat
@@ -81,7 +72,7 @@ const ChatScreen = ({route}) => {
               }}
               wrapperStyle={{
                 left: {
-                  backgroundColor: getRandomColor(),
+                  backgroundColor: "#dfe6e9",
                 }
               }}
               renderTime={props => {
