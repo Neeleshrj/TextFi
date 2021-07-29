@@ -20,6 +20,37 @@ const ForgotPass = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  function sendEmail() {
+    setLoading(true);
+    if (email !='') {
+      auth()
+        .sendPasswordResetEmail(email)
+        .then(() => console.log('Email sent succ...'))
+        .catch(e => {
+          console.log(e);
+          Alert.alert('Error!', e.code, {
+            text: 'Ok',
+            onPress: () => console.log('error logged...'),
+          });
+        });
+      setModalVisible(true);
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 500);
+      setEmail('');
+      setLoading(false);
+    } else {
+      Alert.alert('Error!', 'Email cannot be empty!', [
+        {
+          text: 'Retry',
+          onPress: () => {
+            console.log('empty email...');
+          },
+        },
+      ]);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.input}>
@@ -43,26 +74,7 @@ const ForgotPass = () => {
           buttonColor="#ffffff"
           loading={loading}
           onPress={() => {
-            setLoading(true);
-            auth().sendPasswordResetEmail(email)
-            .then(() => console.log('Email sent succ...'))
-            .catch(e => {
-              console.log(e);
-              Alert.alert(
-                'Error!',
-                e.code,
-                {
-                  text: 'Ok',
-                  onPress: () => console.log('error logged...'),
-                }
-              )
-            })
-            setModalVisible(true);
-            setTimeout(() => {
-              setModalVisible(false);
-            }, 500);
-            setEmail("");
-            setLoading(false);
+            sendEmail();
           }}
         />
       </View>

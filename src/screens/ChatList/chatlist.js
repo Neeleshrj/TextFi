@@ -94,7 +94,7 @@ const ChatList = ({RoomList, navigation}) => {
           <Avatar source={{uri: room.item.avatar_url}} activeOpacity={0.7} size="medium"/>
           <ListItem.Content>
             <ListItem.Title style={styles.chatTitle}>{room.item.name}</ListItem.Title>
-            <ListItem.Subtitle>{room.item.recent.message}</ListItem.Subtitle>
+            <ListItem.Subtitle>{room.item.recent.sentBy} : {room.item.recent.message}</ListItem.Subtitle>
           </ListItem.Content>
           <ListItem.Chevron />
         </ListItem>

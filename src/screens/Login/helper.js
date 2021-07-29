@@ -3,42 +3,45 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 /* React */
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 
-export async function login(email,pass) {
+export async function login(email, pass) {
+  // setLoading(true);
 
-    // setLoading(true);
-    try {   
-        await auth().signInWithEmailAndPassword(email, pass)
+  try {
+    if (email != '' && pass != '') {
+      await auth()
+        .signInWithEmailAndPassword(email, pass)
         .then(() => {
-            // setLoading(true);
+          // setLoading(true);
         })
         .catch(error => {
-            Alert.alert(
-                'Error!',
-                error.code,
-                [
-                    {
-                        text: 'Retry',
-                        onPress: () => console.log('sign in failed..'),
-                        style: 'cancel'
-                    }
-                ]
-            );
-            // setLoading(false);
-        }); 
-      }catch(e){
-        Alert.alert(
-            'Error!',
-            e.code,
-            [
-                {
-                    text: 'Retry',
-                    onPress: () => console.log('sign in failed..'),
-                    style: 'cancel'
-                }
-            ]
-        );
-        // setLoading(false);
+          Alert.alert('Error!', error.code, [
+            {
+              text: 'Retry',
+              onPress: () => console.log('sign in failed..'),
+              style: 'cancel',
+            },
+          ]);
+          // setLoading(false);
+        });
+    } else {
+      Alert.alert('Error!', 'Email or Password cannot be empty!', [
+        {
+          text: 'Retry',
+          onPress: () => console.log('Empty ...'),
+          style: 'cancel',
+        },
+      ]);
     }
+  } catch (e) {
+    Alert.alert('Error!', e.code, [
+      {
+        text: 'Retry',
+        onPress: () => console.log('sign in failed..'),
+        style: 'cancel',
+      },
+    ]);
+    // setLoading(false);
+  }
 }

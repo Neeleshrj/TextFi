@@ -1,11 +1,11 @@
 /* React & React Native imports */
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat, Bubble, Time} from 'react-native-gifted-chat';
 
 /*Functions */
 import { onSend } from './helper';
@@ -42,6 +42,15 @@ const ChatScreen = ({route}) => {
     console.error(error);
   }
 
+  function getRandomColor() {
+    var letters = 'BCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * letters.length)];
+    }
+    return color;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <GiftedChat
@@ -61,6 +70,35 @@ const ChatScreen = ({route}) => {
         }}
         renderAvatarOnTop={true}
         scrollToBottom={true}
+        renderBubble={props => {
+          return(
+            <Bubble 
+              {...props}
+              textStyle={{
+                right: {
+                  color: 'white'
+                }
+              }}
+              wrapperStyle={{
+                left: {
+                  backgroundColor: getRandomColor(),
+                }
+              }}
+              renderTime={props => {
+                return(
+                  <Time 
+                    {...props}
+                    timeTextStyle={{
+                      left: {
+                        color: '#2c3e50'
+                      }      
+                    }}
+                  />
+                )
+              }}
+            />
+          )
+        }}
       />
     </SafeAreaView>
   );
@@ -69,6 +107,11 @@ const ChatScreen = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  inputContainer: {
+    borderRadius: 100,
+    marginHorizontal: wp('2%'),
+    
   },
 });
 
