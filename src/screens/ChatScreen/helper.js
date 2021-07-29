@@ -1,4 +1,7 @@
-export async function onSend(message, text) {
+/*firebase*/
+import firestore from '@react-native-firebase/firestore';
+
+export async function onSend(message, text, uid, name, rid) {
     
     // console.log('sending message to db...')
     // console.log(message.map(a => a.createdAt));

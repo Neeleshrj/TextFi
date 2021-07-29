@@ -6,9 +6,9 @@ import {View} from 'react-native';
 const Settings = ({navigation}) => {
   const list = [
     {
-      title: 'Forgot Password',
+      title: 'Reset Password',
       icon: 'lock-clock',
-      route: 'forgot-pass'
+      route: 'reset-pass'
     },
     {
       title: 'Logout',

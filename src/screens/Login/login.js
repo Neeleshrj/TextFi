@@ -11,8 +11,6 @@ import SolidButton  from '../../components/button';
 /* Functions */
 import {login} from './helper';
 
-/* Firebase */
-import auth from '@react-native-firebase/auth';
 
 const Login = ({navigation}) => {
     const [email, setEmail] = useState("");

@@ -52,7 +52,7 @@ const ChatScreen = ({route}) => {
         onSend={messages => {
           setTyping(false);
           setSend(true);
-          onSend(messages, text);
+          onSend(messages, text, uid, name, rid);
           setSend(false);
         }}
         user={{
