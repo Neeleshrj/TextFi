@@ -15,7 +15,13 @@ import auth from '@react-native-firebase/auth';
 import InputBox from './inputbox';
 import ModalButton from './modalButton';
 
-const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModalLoading}) => {
+const QuickOverlay = ({
+  visible,
+  toggleOverlay,
+  placeholder,
+  buttonTitle,
+  setModalLoading,
+}) => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -32,34 +38,28 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModa
             sentBy: '',
           },
           sentAt: '',
-          unread: "0",
-          rid: "",
-          avatar_url: "https://ui-avatars.com/api/?name="+input+"&background=random&rounded=true"
+          unread: '0',
+          rid: '',
+          avatar_url:
+            'https://ui-avatars.com/api/?name=' +
+            input +
+            '&background=random&rounded=true',
         })
         .then(async docRef => {
           await firestore()
-            .collection('users')
-            .doc(auth().currentUser.uid)
+            .collection('rooms')
+            .doc(docRef.id)
             .update({
-              room: firestore.FieldValue.arrayUnion(docRef.id),
+              rid: docRef.id,
             })
             .then(
               await firestore()
-              .collection('rooms')
-              .doc(docRef.id)
-              .update({
-                rid: docRef.id,
-              })
-              .catch(e => console.log(e))
-            )
-            .then(
-              await firestore()
-              .collection('messages')
-              .doc(docRef.id)
-              .set({
-                messages: [],
-              })
-              .catch(e => console.log(e))
+                .collection('messages')
+                .doc(docRef.id)
+                .set({
+                  messages: [],
+                })
+                .catch(e => console.log(e))
             )
             .catch(e => console.log(e));
         })
@@ -70,25 +70,16 @@ const QuickOverlay = ({visible, toggleOverlay, placeholder, buttonTitle, setModa
           console.log('succ');
         })
         .catch(e => console.log(e));
-    }else{
+    } else {
       await firestore()
         .collection('rooms')
         .doc(input)
         .update({
           members: firestore.FieldValue.arrayUnion(auth().currentUser.uid),
         })
-        .then(async () => {
-          await firestore()
-            .collection('users')
-            .doc(auth().currentUser.uid)
-            .update({
-              room: firestore.FieldValue.arrayUnion(input),
-            })
-            .then(()=> {
-              setLoading(false);
-              setModalLoading(true);
-            })
-            .catch(e => console.log(e));
+        .then(() => {
+          setLoading(false);
+          setModalLoading(true);
         })
         .catch(e => console.log(e));
     }

@@ -1,5 +1,5 @@
 /* React & React Native imports */
-import React,{useState} from 'react';
+import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -7,24 +7,20 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Icon } from 'react-native-elements';
-import Clipboard from '@react-native-community/clipboard';
 
-
-/* Components */
-import CopiedModal from '../components/copiedModal';
 
 /* Screens*/
 import ChatList from '../screens/chatlist';
 import ChatScreen from '../screens/chatscreen';
 import Settings from "../screens/setttings";
 import Logout from "../screens/logout";
+import ChatInfo from "../screens/chatinfo";
 
 
 
 const Stack = createStackNavigator();
 
 const RootStack = () => {
-  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <Stack.Navigator
@@ -51,21 +47,21 @@ const RootStack = () => {
       <Stack.Screen
         name="chatscreen"
         component={ChatScreen}
-        options={({route}) => ({
+        options={({navigation,route}) => ({
           headerTitle: route.params.screenName,
           headerRight: () => (
             <>
-              <TouchableOpacity onPress={() => {
-                setModalVisible(true);
+              <TouchableOpacity onPress={() => navigation.navigate('chatinfo',{
+                rid: route.params.rid
+              })}>
+                <Icon name='info-circle' type='font-awesome' color='#ffffff' style={{padding: hp('2%')}}/>
+              </TouchableOpacity>
+              {/* <CopiedModal visible={modalVisible} text="Room Code copied!" />
+              setModalVisible(true);
                 Clipboard.setString(route.params.rid);
                 setTimeout(() => {
                   setModalVisible(false);
-                },1000)
-              }
-              }>
-                <Icon name='copy' type='font-awesome' color='#ffffff' style={{padding: hp('2%')}}/>
-              </TouchableOpacity>
-              <CopiedModal visible={modalVisible} text="Room Code copied!" />
+                },1000) */}
             </>
           ),
         })}
@@ -75,6 +71,13 @@ const RootStack = () => {
         component={Settings}
         options={{
           title: 'Settings',
+        }}
+      />
+      <Stack.Screen 
+        name="chatinfo"
+        component={ChatInfo}
+        options={{
+          title: 'Information'
         }}
       />
       <Stack.Screen

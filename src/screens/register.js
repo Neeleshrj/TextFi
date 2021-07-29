@@ -43,7 +43,6 @@ const Register = ({navigation}) => {
                     firestore().collection('users').doc(auth().currentUser.uid)
                     .set({
                         email: email,
-                        room: [],
                         uid: auth().currentUser.uid
                     })
                     .catch(error => {
