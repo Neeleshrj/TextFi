@@ -1,11 +1,11 @@
 /* React & React Native imports */
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, View, StyleSheet, Alert} from 'react-native';
+import {SafeAreaView, View, StyleSheet, Alert, Keyboard} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {GiftedChat, Bubble, Time} from 'react-native-gifted-chat';
+import {GiftedChat, Bubble, Time, InputToolbar, Composer} from 'react-native-gifted-chat';
 
 /*componenets*/
 import Loading from "../../components/loading";
@@ -22,6 +22,7 @@ const ChatScreen = ({route}) => {
   const [text, setText] = useState('');
   const [isTyping, setTyping] = useState(false);
   const [send, setSend] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const {rid, members} = route.params;
 
   const uid = auth().currentUser.uid;
@@ -56,6 +57,28 @@ const ChatScreen = ({route}) => {
     )
   }
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setTyping(true);
+        setKeyboardVisible(true); 
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setTyping(false);
+        setKeyboardVisible(false);
+      }
+    );
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+
   return (
     <SafeAreaView style={styles.container}>
       <GiftedChat
@@ -63,11 +86,9 @@ const ChatScreen = ({route}) => {
         // inverted={false}
         text={text}
         onInputTextChanged={text => {
-          setTyping(true);
           setText(text);
         }}
         onSend={messages => {
-          setTyping(false);
           setSend(true);
           onSend(messages, text, uid, name, rid);
           setSend(false);
@@ -84,6 +105,23 @@ const ChatScreen = ({route}) => {
             <View style={{marginTop: hp('40%'), marginHorizontal: wp('20%')}}>
         <Loading />
       </View>
+          )
+        }}
+        renderInputToolbar={props => {
+          return(
+            <InputToolbar 
+              {...props}
+              renderComposer={props => {
+                return(
+                  <Composer 
+                    {...props}
+                    textInputStyle={{
+                      color: '#000000'
+                    }}
+                  />
+                )
+              }}
+            />
           )
         }}
         renderAvatarOnTop={true}
