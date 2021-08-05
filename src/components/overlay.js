@@ -1,6 +1,6 @@
 /* React & React native */
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Alert} from 'react-native';
 import {Overlay} from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
@@ -80,8 +80,24 @@ const QuickOverlay = ({
         .then(() => {
           setLoading(false);
           setModalLoading(true);
+          setInput('');
         })
-        .catch(e => console.log(e));
+        .catch(e => {
+          setLoading(false);
+          Alert.alert(
+            'Error!',
+            'Invalid room code!',
+            [
+              {
+                text: 'Retry',
+                onPress: () => {
+                  console.log('wrong room no.');
+                  setModalLoading(false);
+                }
+              }
+            ]
+          )
+        });
     }
   }
 

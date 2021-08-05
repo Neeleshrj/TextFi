@@ -65,8 +65,6 @@ const ChatList = ({RoomList, navigation}) => {
 
 
   function renderRooms(room) {
-    console.log('inside render');
-    console.log(room.item.name);
     return (
       <TouchableWithoutFeedback>
         {/* <ChatBox

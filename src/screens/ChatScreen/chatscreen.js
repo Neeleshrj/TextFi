@@ -1,11 +1,14 @@
 /* React & React Native imports */
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, View, StyleSheet} from 'react-native';
+import {SafeAreaView, View, StyleSheet, Alert, Keyboard} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {GiftedChat, Bubble, Time} from 'react-native-gifted-chat';
+import {GiftedChat, Bubble, Time, InputToolbar, Composer} from 'react-native-gifted-chat';
+
+/*componenets*/
+import Loading from "../../components/loading";
 
 /*Functions */
 import { onSend } from './helper';
@@ -19,6 +22,7 @@ const ChatScreen = ({route}) => {
   const [text, setText] = useState('');
   const [isTyping, setTyping] = useState(false);
   const [send, setSend] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const {rid, members} = route.params;
 
   const uid = auth().currentUser.uid;
@@ -35,29 +39,89 @@ const ChatScreen = ({route}) => {
   },[]);
 
   function onResult(QuerySnapshot) {
-    setMessages(QuerySnapshot.data().messages);
+    setMessages(QuerySnapshot.data().messages.reverse());
   }
 
   function onError(error) {
-    console.error(error);
+    Alert.alert(
+      'Error!',
+      'Message to retrieve messages!Is your internet on?',
+      [
+        {
+          text: 'Ok',
+          onPress: () => {
+            console.log('failed to retrieve message')
+          }
+        }
+      ]
+    )
   }
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setTyping(true);
+        setKeyboardVisible(true); 
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setTyping(false);
+        setKeyboardVisible(false);
+      }
+    );
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <GiftedChat
         messages={messages}
-        inverted={false}
+        // inverted={false}
         text={text}
-        onInputTextChanged={text => setText(text)}
+        onInputTextChanged={text => {
+          setText(text);
+        }}
         onSend={messages => {
-          setTyping(false);
           setSend(true);
           onSend(messages, text, uid, name, rid);
           setSend(false);
         }}
+        renderUsernameOnMessage={true}
+        multiline={false}
         user={{
           _id: uid,
           name: name,
+        }}
+        isTyping={isTyping}
+        renderLoading={() => {
+          return(
+            <View style={{marginTop: hp('40%'), marginHorizontal: wp('20%')}}>
+        <Loading />
+      </View>
+          )
+        }}
+        renderInputToolbar={props => {
+          return(
+            <InputToolbar 
+              {...props}
+              renderComposer={props => {
+                return(
+                  <Composer 
+                    {...props}
+                    textInputStyle={{
+                      color: '#000000'
+                    }}
+                  />
+                )
+              }}
+            />
+          )
         }}
         renderAvatarOnTop={true}
         scrollToBottom={true}
